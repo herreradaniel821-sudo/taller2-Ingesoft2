@@ -2,31 +2,29 @@
 
 ## 1. Descripción del Sistema
 
-La plataforma permite:
+La plataforma de Gestión de Eventos Universitarios permite:
 
 1. Registro de estudiantes.
 2. Validación de código estudiantil.
 3. Inscripción a eventos.
 
-Un estudiante podrá inscribirse a un evento solo si:
-
-Está registrado.
-El evento tiene cupos disponibles.
-No está previamente inscrito.
-Si alguna condición no se cumple, el sistema no debe permitir la inscripción.
-
 ## 2. Requerimientos a Evaluar
-RF-03 Inscripción a Evento
-## RF01 Registro de Estudiante (Edad)
-El sistema debe permitir el registro de estudiantes cuya edad esté entre 16 y 65 años inclusive.
+
+- **RF-01** Registro de Estudiante (Edad)
+- **RF-02** Validación de Código Estudiantil
+- **RF-03** Inscripción a Evento
+
+---
 
 ## 3. Técnicas de Prueba Aplicadas
-## RF01 Registro de Estudiante (Edad)
-## Análisis de Valor Límite
 
-Identificamos que podemos aplicar la técnica del valor límite, ya que este requerimiento nos da la edad mínima y máxima a evaluar.
+### RF-01 – Registro de Estudiante (Edad)
 
-| Caso | Edad Ingresada | Resultado esperado |
+**Técnica:** Análisis de Valor Límite
+
+**Justificación:** Se aplica esta técnica porque el requerimiento define un rango numérico con un mínimo (16) y un máximo (65), lo que permite identificar los valores límite exactos donde el sistema cambia de comportamiento.
+
+| Caso | Edad Ingresada | Resultado Esperado |
 |------|----------------|-------------------|
 | VL01 | 15 (Justo debajo del mínimo) | Edad inválida |
 | VL02 | 16 (Valor mínimo) | Edad aceptada |
@@ -34,66 +32,85 @@ Identificamos que podemos aplicar la técnica del valor límite, ya que este req
 | VL04 | 64 (Justo debajo del máximo) | Edad aceptada |
 | VL05 | 65 (Valor máximo) | Edad aceptada |
 | VL06 | 66 (Justo encima del máximo) | Edad inválida |
-2. Validación de código estudiantil.
 
-## 3. Tecnicas de Prueba Aplicadas
-Tabla de decisión
-Justificacion: elegimos esta tecnica por que es la unica que nos permite combinar diferentes escenarios para los cuales el sistema acepta o rechaza la inscripcion al evento. ninguna de las otras tecnicas nos permite hacer esto, salvo los arreglos ortogonales pero en este caso al ser pocos datos podemos permitirnos usar esta tecnica
-Cobertura de Tabla: Se han cubierto todas las combinaciones lógicas que resultan en éxito y los fallos individuales de cada condición, logrando una cobertura del 100% de las reglas de decisión factibles.
+---
 
-| Esta registrado | Cupos disponilbes | Está previamente inscrito | Inscipción |
-| :-------------: | :---------------: | :-----------------------: | :--------: |
-| esta registrado | si hay            | no                        | aceptada   |
-| esta registrado | si hay            | si                        | rechazada  |
-| esta registrado | no hay            | si                        | rechazada  |
-| esta registrado | no hay            | no                        | rechazada  |
-| no lo está      | si hay            | si                        | rechazada  |
-| no lo está      | si hay            | no                        | rechazada  |
-| no lo está      | no hay            | si                        | rechazada  |
-| no lo está      | no hay            | no                        | rechazada  |
+### RF-02 – Validación de Código Estudiantil
+
+**Técnica:** Tabla de Decisión
+
+**Justificación:** Se aplica esta técnica porque el requerimiento combina múltiples condiciones simultáneas (longitud, letra inicial y tipo de caracteres), y la tabla de decisión permite evaluar todas las combinaciones posibles de manera sistemática.
+
+Condiciones evaluadas:
+- Condición 1: El código debe tener exactamente 8 caracteres.
+- Condición 2: Debe comenzar con la letra "E".
+- Condición 3: Los 7 caracteres restantes deben ser numéricos.
+
+| Caso | Descripción | Resultado Esperado |
+|------|-------------|-------------------|
+| TD01 | 8 caracteres, empieza por "E", 7 restantes numéricos | Aprobado |
+| TD02 | 8 caracteres, empieza por "E", 7 restantes NO numéricos | No aprobado |
+| TD03 | 8 caracteres, empieza por "A", 7 restantes numéricos | No aprobado |
+| TD04 | 7 caracteres, empieza por "E", 6 restantes numéricos | No aprobado |
+| TD05 | 9 caracteres, empieza por "E", 8 restantes numéricos | No aprobado |
+| TD06 | 5 caracteres, empieza por "T", 4 restantes numéricos | No aprobado |
+
+---
+
+### RF-03 – Inscripción a Evento
+
+**Técnica:** Tabla de Decisión
+
+**Justificación:** Se aplica esta técnica porque es la única que permite combinar los diferentes escenarios en los cuales el sistema acepta o rechaza la inscripción al evento, evaluando las tres condiciones de forma conjunta y cubriendo el 100% de las reglas de decisión factibles.
+
+| Está registrado | Cupos disponibles | Está previamente inscrito | Inscripción |
+|:--------------:|:-----------------:|:-------------------------:|:-----------:|
+| Sí | Sí | No | Aceptada |
+| Sí | Sí | Sí | Rechazada |
+| Sí | No | No | Rechazada |
+| Sí | No | Sí | Rechazada |
+| No | Sí | No | Rechazada |
+| No | Sí | Sí | Rechazada |
+| No | No | No | Rechazada |
+| No | No | Sí | Rechazada |
+
+---
+
 ## 4. Casos de Prueba Diseñados
-| ID   | Descripción                         | Precondiciones                                                                 | Datos de prueba                                                   | Pasos                              | Resultado esperado                  | Estado                         |
-|------|-------------------------------------|---------------------------------------------------------------------------------|-------------------------------------------------------------------|-------------------------------------|-------------------------------------|---------------------------------|
-| CP05 | Registrar un estudiante al evento   | El estudiante debe estar registrado, el evento debe estar disponible y no debe estar previamente inscrito. | Está registrado, hay cupos disponibles y no está previamente inscrito. | El sistema evalúa las condiciones. | El sistema acepta la inscripción.  | Inscrito al evento.            |
-| CP06 | Registrar un estudiante al evento   | El estudiante debe estar registrado, el evento debe estar disponible y no debe estar previamente inscrito. | No está registrado, no hay cupos disponibles y sí está previamente inscrito. | El sistema evalúa las condiciones. | El sistema rechaza la inscripción. | No está inscrito al evento.    |
-Tabla de Desición
 
-Prueba de cobertura: Coincidimos en que esta fue la mejor **técnica** de caja negra debido a que se utilizan diferentes condiciones para validar un resultado. La que mejor se acomoda a esta descripción es la **técnica de tabla de decisión**, debido a que esta nos permite evaluarla en sus diferentes combinaciones posibles.
+### RF-01 – Registro de Estudiante (Edad)
 
-- Condición 1: El código debe tener 8 caracteres.
-- Condición 2: Debe de comenzar con la letra "E".
-- Condición 3: Los 7 caracteres restantes deben ser numéricos. 
+| ID   | Descripción | Precondiciones | Datos de prueba | Pasos | Resultado Esperado | Estado |
+|------|-------------|----------------|-----------------|-------|--------------------|--------|
+| CP01 | Verificar que el sistema acepte una edad dentro del rango permitido | El usuario debe ingresar su edad | 18 años | 1. Ingresa la edad  2. Completa el registro  3. Envía el registro | El sistema valida la edad y permite completar el registro | Pendiente |
+| CP02 | Verificar que el sistema rechace una edad fuera del rango permitido | El usuario debe ingresar su edad | 14 años | 1. Ingresa la edad  2. Completa el registro  3. Envía el registro | El sistema detecta la edad inválida y cancela el registro | Pendiente |
 
-Combinaciones posibles:
+---
 
-| Caso  | Condiciones Usuario | Resultado Esperado |
-|--------------|--------------|--------------|
-| TD01       | El código del estudiante contiene 8 caracteres, empieza por "E" y sus 7 valores restantes son numéricos.       | Aprobado      |
-| TD02      | El código del estudiante contiene 8 caracteres, empieza por "E" y sus 7 valores restantes NO son numéricos.     | No aprobado  |
-| TD03      | El código del estudiante contiene 8 caracteres, empieza por "A" y sus 7 valores restantes son numéricos.     | No aprobado     |
-| TD04      | El código del estudiante contiene 7 caracteres, empieza por "E" y sus 6 valores restantes son numéricos.      | No aprobado   |
-| TD05      | El código del estudiante contiene 9 caracteres, empieza por "E" y sus 8 valores restantes son numéricos.     | No aprobado|
-| TD06      | El código del estudiante contiene 5 caracteres, empieza por "T" y sus 4 valores restantes son numéricos.      | No aprobado      |
+### RF-02 – Validación de Código Estudiantil
 
-## 4. Casos de Prueba Diseñados
-## RF01 Registro de Estudiante (Edad)
+| ID   | Descripción | Precondiciones | Datos de prueba | Pasos | Resultado Esperado | Estado |
+|------|-------------|----------------|-----------------|-------|--------------------|--------|
+| CP03 | Verificar que el sistema rechace un código que no comience con "E" | El estudiante debe estar registrado | 8 caracteres, empieza por "A", 7 restantes numéricos (ej: A1234567) | 1. Ingresa el código  2. El sistema verifica los requisitos  3. El sistema emite resultado | El sistema detecta que el código no comienza con "E" y lo rechaza | No válido |
+| CP04 | Verificar que el sistema acepte un código que cumple todos los requisitos | El estudiante debe estar registrado | 8 caracteres, empieza por "E", 7 restantes numéricos (ej: E1234567) | 1. Ingresa el código  2. El sistema verifica los requisitos  3. El sistema emite resultado | El sistema valida que tiene 8 caracteres, comienza con "E" y los 7 restantes son numéricos | Válido |
 
-## Casos de Prueba
+---
 
-| ID   | Descripción                                                             | Precondiciones                     | Datos de prueba | Pasos                                                                 | Resultado esperado                                                        | Estado    |
-|------|-------------------------------------------------------------------------|------------------------------------|-----------------|----------------------------------------------------------------------|----------------------------------------------------------------------------|-----------|
-| CP01 | Verificar que el sistema acepte una edad que cumpla con los requisitos | El usuario debe ingresar su edad   | 18 años         | 1. Ingresa la edad <br> 2. Completa el registro <br> 3. Envía registro | El sistema valida la edad y permite completar el registro                 | Pendiente |
-| CP02 | Verificar que el sistema rechace una edad fuera del rango permitido    | El usuario debe ingresar su edad   | 14 años         | 1. Ingresa la edad <br> 2. Completa el registro <br> 3. Envía registro | El sistema detecta edad inválida y cancela el registro                    | Pendiente |
+### RF-03 – Inscripción a Evento
 
-El uso de la técnica de valor límite fue el más adecuado en este caso, ya que valida una cobertura total de todos los posibles casos de prueba.
+| ID   | Descripción | Precondiciones | Datos de prueba | Pasos | Resultado Esperado | Estado |
+|------|-------------|----------------|-----------------|-------|--------------------|--------|
+| CP05 | Verificar que el sistema acepte la inscripción cuando todas las condiciones se cumplen | El estudiante debe estar registrado, el evento debe tener cupos y el estudiante no debe estar inscrito previamente | Registrado: Sí, Cupos: Sí, Inscrito previamente: No | El sistema evalúa las tres condiciones | El sistema acepta la inscripción | Inscrito al evento |
+| CP06 | Verificar que el sistema rechace la inscripción cuando alguna condición no se cumple | N/A | Registrado: No, Cupos: No, Inscrito previamente: Sí | El sistema evalúa las tres condiciones | El sistema rechaza la inscripción | No inscrito al evento |
 
-| ID  | Descripción | Precondiciones | Datos de prueba | Pasos | Resultado Esperado | Estado |
-|--------------|--------------|--------------|--------------|--------------|--------------|--------------|
-| CP01      | Verificar que el código del estudiante cumpla con los requisitos para poder validarlo para el evento, teniendo en cuenta el numero de caracteres, que empiece por la letra "E" y que sus 7 valores restantes sean numéricos  | El estudiante debe estar registrado | El código del estudiante contiene 8 caracteres, empieza por "A" y sus 7 valores restantes son numéricos. | 1. Ingresa el código del estudiante.  2. Se verifica que el código cumpla con los requisitos. 3. Se permite el registro | El sistema verifica que tiene 8 caracteres, que comience con la letra "E" y que sus 7 caracteres restantes son números. | No válido |
-| CP02      | Verificar que el código del estudiante cumpla con los requisitos para poder validarlo para el evento, teniendo en cuenta el numero de caracteres, que empiece por la letra "E" y que sus 7 valores restantes sean numéricos  | El estudiante debe estar registrado | El código del estudiante contiene 8 caracteres, empieza por "E" y sus 7 valores restantes son numéricos. | 1. Ingresa el código del estudiante.  2. Se verifica que el código cumpla con los requisitos. 3. Se permite el registro | El sistema verifica que tiene 8 caracteres, que comience con la letra "E" y que sus 7 caracteres restantes son números. | Válido |
-
+---
 
 ## 5. Trazabilidad
 
-## 6. Gestión de Versiones (GitFlow)
+| Requerimiento | Técnica Aplicada | Casos Asociados |
+|---------------|-----------------|-----------------|
+| RF-01 | Análisis de Valor Límite | CP01, CP02 |
+| RF-02 | Tabla de Decisión | CP03, CP04 |
+| RF-03 | Tabla de Decisión | CP05, CP06 |
 
+---
