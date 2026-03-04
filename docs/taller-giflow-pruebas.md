@@ -8,8 +8,15 @@ La plataforma permite:
 2. Validación de código estudiantil.
 3. Inscripción a eventos.
 
-## 2. Requerimientos a Evaluar
+Un estudiante podrá inscribirse a un evento solo si:
 
+Está registrado.
+El evento tiene cupos disponibles.
+No está previamente inscrito.
+Si alguna condición no se cumple, el sistema no debe permitir la inscripción.
+
+## 2. Requerimientos a Evaluar
+RF-03 Inscripción a Evento
 ## RF01 Registro de Estudiante (Edad)
 El sistema debe permitir el registro de estudiantes cuya edad esté entre 16 y 65 años inclusive.
 
@@ -30,7 +37,25 @@ Identificamos que podemos aplicar la técnica del valor límite, ya que este req
 2. Validación de código estudiantil.
 
 ## 3. Tecnicas de Prueba Aplicadas
+Tabla de decisión
+Justificacion: elegimos esta tecnica por que es la unica que nos permite combinar diferentes escenarios para los cuales el sistema acepta o rechaza la inscripcion al evento. ninguna de las otras tecnicas nos permite hacer esto, salvo los arreglos ortogonales pero en este caso al ser pocos datos podemos permitirnos usar esta tecnica
+Cobertura de Tabla: Se han cubierto todas las combinaciones lógicas que resultan en éxito y los fallos individuales de cada condición, logrando una cobertura del 100% de las reglas de decisión factibles.
 
+| Esta registrado | Cupos disponilbes | Está previamente inscrito | Inscipción |
+| :-------------: | :---------------: | :-----------------------: | :--------: |
+| esta registrado | si hay            | no                        | aceptada   |
+| esta registrado | si hay            | si                        | rechazada  |
+| esta registrado | no hay            | si                        | rechazada  |
+| esta registrado | no hay            | no                        | rechazada  |
+| no lo está      | si hay            | si                        | rechazada  |
+| no lo está      | si hay            | no                        | rechazada  |
+| no lo está      | no hay            | si                        | rechazada  |
+| no lo está      | no hay            | no                        | rechazada  |
+## 4. Casos de Prueba Diseñados
+| ID   | Descripción                         | Precondiciones                                                                 | Datos de prueba                                                   | Pasos                              | Resultado esperado                  | Estado                         |
+|------|-------------------------------------|---------------------------------------------------------------------------------|-------------------------------------------------------------------|-------------------------------------|-------------------------------------|---------------------------------|
+| CP05 | Registrar un estudiante al evento   | El estudiante debe estar registrado, el evento debe estar disponible y no debe estar previamente inscrito. | Está registrado, hay cupos disponibles y no está previamente inscrito. | El sistema evalúa las condiciones. | El sistema acepta la inscripción.  | Inscrito al evento.            |
+| CP06 | Registrar un estudiante al evento   | El estudiante debe estar registrado, el evento debe estar disponible y no debe estar previamente inscrito. | No está registrado, no hay cupos disponibles y sí está previamente inscrito. | El sistema evalúa las condiciones. | El sistema rechaza la inscripción. | No está inscrito al evento.    |
 Tabla de Desición
 
 Prueba de cobertura: Coincidimos en que esta fue la mejor **técnica** de caja negra debido a que se utilizan diferentes condiciones para validar un resultado. La que mejor se acomoda a esta descripción es la **técnica de tabla de decisión**, debido a que esta nos permite evaluarla en sus diferentes combinaciones posibles.
