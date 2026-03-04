@@ -27,9 +27,10 @@ Cobertura de Tabla: Se han cubierto todas las combinaciones lógicas que resulta
 | no lo está      | no hay            | si                        | rechazada  |
 | no lo está      | no hay            | no                        | rechazada  |
 ## 4. Casos de Prueba Diseñados
-| ID | Descripcion| Precondiciones| Datos de prueba | Pasos | Resultado esperado | Estado |
-| CP05 | Registrar un estudiante al evento | Para inscribirse al evento deberia estar registrado, el evento deberia estar disponible, no debe estár previamente inscrito.| esta registrado, si hay cupos disponibles, no esta previamente inscrito | el sistema evalua las condiciones | el sistema acepta la inscripcion | inscrito al evento
-| CP06 | Registrar un estudiante al evento |  Para inscribirse al evento deberia estar registrado, el evento deberia estar disponible, no debe estár previamente inscrito. | No esta registrado, no hay cupos disponibles, si esta previamente inscrito |  el sistema evalua las condiciones | el sistema rechaza la inscripcion | no esta inscrito al evento |
+| ID   | Descripción                         | Precondiciones                                                                 | Datos de prueba                                                   | Pasos                              | Resultado esperado                  | Estado                         |
+|------|-------------------------------------|---------------------------------------------------------------------------------|-------------------------------------------------------------------|-------------------------------------|-------------------------------------|---------------------------------|
+| CP05 | Registrar un estudiante al evento   | El estudiante debe estar registrado, el evento debe estar disponible y no debe estar previamente inscrito. | Está registrado, hay cupos disponibles y no está previamente inscrito. | El sistema evalúa las condiciones. | El sistema acepta la inscripción.  | Inscrito al evento.            |
+| CP06 | Registrar un estudiante al evento   | El estudiante debe estar registrado, el evento debe estar disponible y no debe estar previamente inscrito. | No está registrado, no hay cupos disponibles y sí está previamente inscrito. | El sistema evalúa las condiciones. | El sistema rechaza la inscripción. | No está inscrito al evento.    |
 ## 5. Trazabilidad
 
 ## 6. Gestion de Versiones (GitFlow)
